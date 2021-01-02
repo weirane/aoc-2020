@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::io::Read;
 use std::iter::FromIterator;
 
 fn solve(buf: &str, predicate: impl Fn(&HashMap<&str, &str>) -> bool) -> usize {
@@ -72,8 +71,7 @@ fn part2_validate(kvmap: &HashMap<&str, &str>) -> Option<bool> {
 }
 
 fn main() {
-    let mut buf = String::new();
-    std::io::stdin().read_to_string(&mut buf).unwrap();
+    let buf = aoc_2020::stdin_string().unwrap();
 
     let needed = vec!["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"];
 

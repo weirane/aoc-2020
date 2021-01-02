@@ -1,5 +1,3 @@
-use std::io::Read;
-
 fn part1(buf: &str) -> usize {
     buf.split("\n\n")
         .map(|group| ('a'..='z').filter(|&c| group.contains(c)).count())
@@ -17,8 +15,7 @@ fn part2(buf: &str) -> usize {
 }
 
 fn main() {
-    let mut buf = String::new();
-    std::io::stdin().read_to_string(&mut buf).unwrap();
+    let buf = aoc_2020::stdin_string().unwrap();
 
     let x = part1(&buf);
     println!("part1: {}", x);

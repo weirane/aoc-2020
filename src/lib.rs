@@ -1,9 +1,15 @@
 use std::fs::File;
-use std::io::{self, BufRead, BufReader};
+use std::io::{self, BufRead, BufReader, Read};
 use std::path::PathBuf;
 
 pub fn stdin_lines() -> impl Iterator<Item = io::Result<String>> {
     BufReader::new(io::stdin()).lines()
+}
+
+pub fn stdin_string() -> io::Result<String> {
+    let mut buf = String::new();
+    io::stdin().read_to_string(&mut buf)?;
+    Ok(buf)
 }
 
 pub fn file_lines(
