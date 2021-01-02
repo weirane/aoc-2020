@@ -31,8 +31,7 @@ fn validate2(line: &str) -> Option<bool> {
 fn count_good(lines: &[String], validate: fn(&str) -> Option<bool>) -> usize {
     lines
         .iter()
-        .flat_map(|li| validate(&li))
-        .filter(|&x| x)
+        .filter(|li| validate(&li).unwrap_or(false))
         .count()
 }
 
