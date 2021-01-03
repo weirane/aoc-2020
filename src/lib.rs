@@ -35,3 +35,14 @@ pub fn min_max<T: PartialOrd + Copy>(xs: &[T]) -> Option<(T, T)> {
         }
     }
 }
+
+pub fn cartesian_product<'a, A: 'a + Clone, B: 'a, I1, I2>(
+    it1: I1,
+    it2: I2,
+) -> impl Iterator<Item = (A, B)> + 'a
+where
+    I1: 'a + Iterator<Item = A>,
+    I2: 'a + Iterator<Item = B> + Clone,
+{
+    it1.flat_map(move |i| it2.clone().map(move |j| (i.clone(), j)))
+}
