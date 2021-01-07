@@ -1,15 +1,17 @@
 use std::collections::HashMap;
-use std::iter::FromIterator;
 
 fn solve(buf: &str, predicate: impl Fn(&HashMap<&str, &str>) -> bool) -> usize {
     buf.split("\n\n")
         .map(|passport| {
-            HashMap::from_iter(passport.split_ascii_whitespace().filter_map(|entry| {
-                let mut sp = entry.split(':');
-                let key = sp.next()?;
-                let val = sp.next()?;
-                Some((key, val))
-            }))
+            passport
+                .split_ascii_whitespace()
+                .filter_map(|entry| {
+                    let mut sp = entry.split(':');
+                    let key = sp.next()?;
+                    let val = sp.next()?;
+                    Some((key, val))
+                })
+                .collect()
         })
         .filter(predicate)
         .count()

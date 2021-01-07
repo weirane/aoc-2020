@@ -1,5 +1,4 @@
 use std::collections::{HashMap, HashSet};
-use std::iter::FromIterator;
 use std::str::FromStr;
 
 #[derive(Debug)]
@@ -9,23 +8,30 @@ impl FromStr for Rule {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let it = s.lines().filter_map(|s| {
-            let mut sp = s.splitn(2, " bags contain ");
-            let subject = sp.next()?.to_string();
-            let contain_iter = sp.next()?.split(", ").filter_map(|r| {
-                let r = r
-                    .trim_end_matches('.')
-                    .trim_end_matches('s')
-                    .trim_end_matches(" bag");
-                let mut sp = r.splitn(2, ' ');
-                let quant: usize = sp.next()?.parse().ok()?;
-                let color = sp.next()?.to_string();
-                Some((color, quant))
-            });
-            Some((subject, HashMap::from_iter(contain_iter)))
-        });
+        let hm = s
+            .lines()
+            .filter_map(|s| {
+                let mut sp = s.splitn(2, " bags contain ");
+                let subject = sp.next()?.to_string();
+                let contain = sp
+                    .next()?
+                    .split(", ")
+                    .filter_map(|r| {
+                        let r = r
+                            .trim_end_matches('.')
+                            .trim_end_matches('s')
+                            .trim_end_matches(" bag");
+                        let mut sp = r.splitn(2, ' ');
+                        let quant: usize = sp.next()?.parse().ok()?;
+                        let color = sp.next()?.to_string();
+                        Some((color, quant))
+                    })
+                    .collect();
+                Some((subject, contain))
+            })
+            .collect();
 
-        Ok(Self(HashMap::from_iter(it)))
+        Ok(Self(hm))
     }
 }
 
