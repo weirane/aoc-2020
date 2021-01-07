@@ -13,10 +13,6 @@ impl State {
     fn manhattan(&self) -> f64 {
         self.x.abs() + self.y.abs()
     }
-
-    fn euclid(&self) -> f64 {
-        (self.x * self.x + self.y * self.y).sqrt()
-    }
 }
 
 fn part1(insts: &[(char, f64)]) -> f64 {
@@ -49,15 +45,11 @@ fn part2(insts: &[(char, f64)]) -> f64 {
             'E' => waypoint.x += amount,
             'W' => waypoint.x -= amount,
             'L' | 'R' => {
-                let r = waypoint.euclid();
-                let theta = waypoint.y.atan2(waypoint.x);
-                let alpha = if dir == 'L' {
-                    theta + amount.to_radians()
-                } else {
-                    theta - amount.to_radians()
-                };
-                waypoint.x = r * alpha.cos();
-                waypoint.y = r * alpha.sin();
+                let theta = if dir == 'L' { amount } else { -amount };
+                let State { x, y, .. } = waypoint;
+                let (sin, cos) = theta.to_radians().sin_cos();
+                waypoint.x = x * cos - y * sin;
+                waypoint.y = x * sin + y * cos;
             }
             'F' => {
                 ship.x += waypoint.x * amount;
