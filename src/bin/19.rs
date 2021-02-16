@@ -36,7 +36,7 @@ fn make_parser2<'a, 'b: 'a>(rules: &'a HashMap<&'a str, Rule>) -> Parser<'a, 'b>
                 *state = state.and_then(make_parser("42", &rules));
                 Some((i, *state))
             })
-            .filter_map(|(i, rest)| {
+            .find_map(|(i, rest)| {
                 (0..i)
                     .scan(rest, |state, _| {
                         *state = state.and_then(make_parser("31", &rules));
@@ -44,7 +44,6 @@ fn make_parser2<'a, 'b: 'a>(rules: &'a HashMap<&'a str, Rule>) -> Parser<'a, 'b>
                     })
                     .last()
             })
-            .next()
     })
 }
 
